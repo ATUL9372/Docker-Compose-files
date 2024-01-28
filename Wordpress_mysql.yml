@@ -1,0 +1,31 @@
+version: '3'
+
+services:
+
+  database_db:
+    image: mysql:latest
+    volumes:
+      - ./db_data:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: admin
+      MYSQL_DATABASE: wordpress
+      MYSQL_USER: wordpress_user
+      MYSQL_PASSWORD: wordpress_password
+
+  wordpress:
+    depends_on:
+      - database_db
+    image: wordpress:latest
+    volumes:
+      - ./wordpress_data:/var/www/html
+    environment:
+      WORDPRESS_DB_HOST: database_db
+      WORDPRESS_DB_USER: wordpress_user
+      WORDPRESS_DB_PASSWORD: wordpress_password
+      WORDPRESS_DB_NAME: wordpress
+    ports:
+      - "8080:80"
+
+volumes:
+  db_data:
+  wordpress_data:
